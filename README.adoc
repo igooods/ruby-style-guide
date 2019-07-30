@@ -166,7 +166,7 @@ end
 [#80-character-limits]
 === Maximum Line Length
 
-Limit lines to 80 characters.
+Limit lines to 120 characters.
 
 === No Trailing Whitespace [[no-trailing-whitespace]]
 
@@ -616,17 +616,17 @@ one.two.three
 
 ==== Trailing `.` [[trailing-dot-in-multi-line-chains]]
 
-When continuing a chained method invocation on another line, include the `.` on the first line to indicate that the expression continues.
+When continuing a chained method invocation on another line, do not include the `.` on the first line to indicate that the expression continues.
 
 [source,ruby]
 ----
-# bad - need to read ahead to the second line to know that the chain continues
-one.two.three
-  .four
-
-# good - it's immediately clear that the expression continues beyond the first line
+# bad - gives no context for a second line
 one.two.three.
   four
+
+# good - second line has context and doesn't appear as a misindentation
+one.two.three
+  .four
 ----
 
 A discussion on the merits of both alternative styles can be found https://github.com/rubocop-hq/ruby-style-guide/pull/176[here].
@@ -2230,7 +2230,7 @@ end
 === Lambda Multi-line [[lambda-multi-line]]
 
 Use the new lambda literal syntax for single-line body blocks.
-Use the `lambda` method for multi-line blocks.
+Do not use the `lambda` method for multi-line blocks.
 
 [source,ruby]
 ----
@@ -2238,20 +2238,20 @@ Use the `lambda` method for multi-line blocks.
 l = lambda { |a, b| a + b }
 l.call(1, 2)
 
-# correct, but looks extremely awkward
-l = ->(a, b) do
+l = lambda do |a, b|
   tmp = a * 7
   tmp * b / 50
 end
 
 # good
-l = ->(a, b) { a + b }
-l.call(1, 2)
-
-l = lambda do |a, b|
+l = ->(a, b) do
   tmp = a * 7
   tmp * b / 50
 end
+
+l = ->(a, b) { a + b }
+l.call(1, 2)
+
 ----
 
 === Stabby Lambda with Arguments [[stabby-lambda-with-args]]
